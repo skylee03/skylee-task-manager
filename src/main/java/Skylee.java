@@ -12,17 +12,27 @@ public class Skylee {
 
         Scanner scanner = new Scanner(System.in);
 
+        String[] commandList = new String[100];
+        int commandCount = 0;
+
         System.out.println(helloMsg);
         for (String command;;) {
             command = scanner.nextLine();
             if (command.equals("bye")) {
                 System.out.println(byeMsg);
                 break;
+            } else if (command.equals("list")) {
+                System.out.print("____________________________________________________________\n");
+                for (int i = 0; i < commandCount; i++) {
+                    System.out.println(" " + (i + 1) + ". " + commandList[i]);
+                }
+                System.out.println("____________________________________________________________\n");
             } else {
-                String msg = "____________________________________________________________\n" +
-                        " " + command + "\n" +
-                        "____________________________________________________________\n";
-                System.out.println(msg);
+                commandList[commandCount] = command;
+                commandCount++;
+                System.out.print("____________________________________________________________\n");
+                System.out.println(" added: " + command);
+                System.out.println("____________________________________________________________\n");
             }
         }
     }
