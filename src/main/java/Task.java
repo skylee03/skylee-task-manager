@@ -23,4 +23,8 @@ public class Task {
     public void unmarkAsNotDone() {
         isDone = false;
     }
+
+    public String toString() {
+        return "[" + getStatusIcon() + "] " + getDescription();
+    }
 }
