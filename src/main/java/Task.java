@@ -3,6 +3,10 @@ public class Task {
 
     private boolean isDone;
 
+    public static Task parseTask(String command) {
+        return new Task(command);
+    }
+
     public Task(String description) {
         this.description = description;
         this.isDone = false;

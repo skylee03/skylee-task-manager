@@ -53,26 +53,17 @@ public class Skylee {
             } else if (command.equals("list")) {
                 printTasks();
             } else if (command.startsWith("mark ")) {
-                int i = Integer.parseInt(command.substring("mark ".length())) - 1;
-                markAndPrint(tasks[i]);
+                int taskId = Integer.parseInt(command.substring("mark ".length())) - 1;
+                markAndPrint(tasks[taskId]);
             } else if (command.startsWith("unmark ")) {
-                int i = Integer.parseInt(command.substring("unmark ".length())) - 1;
-                unmarkAndPrint(tasks[i]);
+                int taskId = Integer.parseInt(command.substring("unmark ".length())) - 1;
+                unmarkAndPrint(tasks[taskId]);
             } else if (command.startsWith("todo ")) {
-                String description = command.substring("todo ".length());
-                addTaskAndPrint(new Todo(description));
+                addTaskAndPrint(Todo.parseTodo(command));
             } else if (command.startsWith("deadline ")) {
-                int byIndex = command.indexOf(" /by ");
-                String description = command.substring("deadline ".length(), byIndex);
-                String by = command.substring(byIndex + " /by ".length());
-                addTaskAndPrint(new Deadline(description, by));
+                addTaskAndPrint(Deadline.parseDeadline(command));
             } else if (command.startsWith("event ")) {
-                int fromIndex = command.indexOf(" /from ");
-                int toIndex = command.indexOf(" /to ");
-                String description = command.substring("event ".length(), fromIndex);
-                String from = command.substring(fromIndex + " /from ".length(), toIndex);
-                String to = command.substring(toIndex + " /to ".length());
-                addTaskAndPrint(new Event(description, from, to));
+                addTaskAndPrint(Event.parseEvent(command));
             } else {
                 addTaskAndPrint(new Task(command));
             }
