@@ -2,11 +2,13 @@ package skylee.task;
 
 import skylee.SkyleeException;
 
+import static skylee.io.Message.MESSAGE_BY_MISSING;
+import static skylee.io.Message.MESSAGE_DEADLINE_EMPTY;
+import static skylee.io.Message.MESSAGE_BY_EMPTY;
+
+import static skylee.io.Parameter.PARAMETER_BY;
+
 public class Deadline extends Task {
-    public static final String PARAMETER_BY = "/by";
-    public static final String MESSAGE_BY_MISSING = "The \"by\" field is missing.";
-    public static final String MESSAGE_DEADLINE_EMPTY = "The \"description\" field of a deadline cannot be empty.";
-    public static final String MESSAGE_BY_EMPTY = "The \"by\" field of a deadline cannot be empty.";
     protected String by;
 
     public static Deadline parseDeadline(String commandArgs) throws SkyleeException {
