@@ -33,6 +33,11 @@ public class Skylee {
         System.out.println(LINE);
     }
 
+    private static void bye() {
+        showMessages(MESSAGE_BYE);
+        System.exit(0);
+    }
+
     private static String[] addTask(Task task) {
         tasks[taskCount] = task;
         taskCount++;
@@ -41,16 +46,31 @@ public class Skylee {
                 String.format(MESSAGE_COUNT, taskCount, taskCount > 1 ? "s" : "")};
     }
 
-    private static String[] markTask(Task task) {
-        task.markAsDone();
-        return new String[]{MESSAGE_MARK,
-                PREFIX_TASK + task};
+    private static int parseTaskId(String commandArgs) throws SkyleeException {
+        int taskId;
+        try {
+            taskId = Integer.parseInt(commandArgs) - 1;
+        } catch (NumberFormatException e) {
+            throw new SkyleeException(MESSAGE_ID_FORMAT);
+        }
+        if (taskId < 0 || taskId >= taskCount) {
+            throw new SkyleeException(MESSAGE_ID_OUT_OF_RANGE);
+        }
+        return taskId;
     }
 
-    private static String[] unmarkTask(Task task) {
-        task.unmarkAsNotDone();
+    private static String[] markTask(String commandArgs) throws SkyleeException {
+        int taskId = parseTaskId(commandArgs);
+        tasks[taskId].markAsDone();
+        return new String[]{MESSAGE_MARK,
+                PREFIX_TASK + tasks[taskId]};
+    }
+
+    private static String[] unmarkTask(String commandArgs) throws SkyleeException {
+        int taskId = parseTaskId(commandArgs);
+        tasks[taskId].unmarkAsNotDone();
         return new String[]{MESSAGE_UNMARK,
-                PREFIX_TASK + task};
+                PREFIX_TASK + tasks[taskId]};
     }
 
     private static String[] listTasks() {
@@ -78,30 +98,14 @@ public class Skylee {
         try {
             switch (commandType) {
             case COMMAND_BYE:
-                showMessages(MESSAGE_BYE);
-                System.exit(0);
+                bye();
+                // Fallthrough
             case COMMAND_LIST:
                 return listTasks();
             case COMMAND_MARK:
-                try {
-                    int taskId = Integer.parseInt(commandArgs) - 1;
-                    if (taskId < 0 || taskId >= taskCount) {
-                        throw new SkyleeException(MESSAGE_ID_OUT_OF_RANGE);
-                    }
-                    return markTask(tasks[taskId]);
-                } catch (NumberFormatException e) {
-                    throw new SkyleeException(MESSAGE_ID_FORMAT);
-                }
+                return markTask(commandArgs);
             case COMMAND_UNMARK:
-                try {
-                    int taskId = Integer.parseInt(commandArgs) - 1;
-                    if (taskId < 0 || taskId >= taskCount) {
-                        throw new SkyleeException(MESSAGE_ID_OUT_OF_RANGE);
-                    }
-                    return unmarkTask(tasks[taskId]);
-                } catch (NumberFormatException e) {
-                    throw new SkyleeException(MESSAGE_ID_FORMAT);
-                }
+                return unmarkTask(commandArgs);
             case COMMAND_TODO:
                 return addTask(Todo.parseTodo(commandArgs));
             case COMMAND_DEADLINE:
