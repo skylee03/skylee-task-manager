@@ -1,10 +1,19 @@
 public class Deadline extends Task {
     protected String by;
 
-    public static Deadline parseDeadline(String command) {
-        int byIndex = command.indexOf(" /by ");
-        String description = command.substring("deadline ".length(), byIndex);
-        String by = command.substring(byIndex + " /by ".length());
+    public static Deadline parseDeadline(String commandArgs) throws SkyleeException {
+        final int byIndex = commandArgs.indexOf("/by");
+        if (byIndex == -1) {
+            throw new SkyleeException("The \"by\" field is missing.");
+        }
+        final String description = commandArgs.substring(0, byIndex).trim();
+        final String by = commandArgs.substring(byIndex + "/by".length()).trim();
+        if (description.isEmpty()) {
+            throw new SkyleeException("The \"description\" field of a deadline cannot be empty.");
+        }
+        if (by.isEmpty()) {
+            throw new SkyleeException("The \"by\" field of a deadline cannot be empty.");
+        }
         return new Deadline(description, by);
     }
 
