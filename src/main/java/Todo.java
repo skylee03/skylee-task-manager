@@ -1,6 +1,9 @@
 public class Todo extends Task {
-    public static Todo parseTodo(String command) {
-        String description = command.substring("todo ".length());
+    public static Todo parseTodo(String commandArgs) throws SkyleeException {
+        final String description = commandArgs;
+        if (description.isEmpty()) {
+            throw new SkyleeException("The \"description\" field of a todo cannot be empty.");
+        }
         return new Todo(description);
     }
 
