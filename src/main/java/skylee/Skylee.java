@@ -1,5 +1,6 @@
 package skylee;
 
+import skylee.exception.SkyleeException;
 import skylee.task.Deadline;
 import skylee.task.Event;
 import skylee.task.Task;

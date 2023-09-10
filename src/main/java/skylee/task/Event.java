@@ -1,6 +1,6 @@
 package skylee.task;
 
-import skylee.SkyleeException;
+import skylee.exception.SkyleeException;
 
 import static skylee.io.Message.MESSAGE_FROM_MISSING;
 import static skylee.io.Message.MESSAGE_TO_MISSING;
