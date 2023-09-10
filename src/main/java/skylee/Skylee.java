@@ -1,5 +1,6 @@
 package skylee;
 
+import skylee.exception.SkyleeException;
 import skylee.task.Deadline;
 import skylee.task.Event;
 import skylee.task.Task;
@@ -7,28 +8,30 @@ import skylee.task.Todo;
 
 import java.util.Scanner;
 
+import static skylee.io.Command.COMMAND_BYE;
+import static skylee.io.Command.COMMAND_LIST;
+import static skylee.io.Command.COMMAND_MARK;
+import static skylee.io.Command.COMMAND_UNMARK;
+import static skylee.io.Command.COMMAND_TODO;
+import static skylee.io.Command.COMMAND_DEADLINE;
+import static skylee.io.Command.COMMAND_EVENT;
+
+import static skylee.io.Message.LINE;
+import static skylee.io.Message.PREFIX_MESSAGE;
+import static skylee.io.Message.PREFIX_TASK;
+import static skylee.io.Message.PREFIX_EXCEPTION;
+import static skylee.io.Message.MESSAGE_HELLO;
+import static skylee.io.Message.MESSAGE_BYE;
+import static skylee.io.Message.MESSAGE_UNKNOWN_COMMAND;
+import static skylee.io.Message.MESSAGE_ID_FORMAT;
+import static skylee.io.Message.MESSAGE_ID_OUT_OF_RANGE;
+import static skylee.io.Message.MESSAGE_LIST;
+import static skylee.io.Message.MESSAGE_UNMARK;
+import static skylee.io.Message.MESSAGE_MARK;
+import static skylee.io.Message.MESSAGE_ADD;
+import static skylee.io.Message.MESSAGE_COUNT;
+
 public class Skylee {
-    private static final String PREFIX_EXCEPTION = "☹ OOPS!!! ";
-    private static final String COMMAND_BYE = "bye";
-    private static final String COMMAND_LIST = "list";
-    private static final String COMMAND_MARK = "mark";
-    private static final String COMMAND_UNMARK = "unmark";
-    private static final String COMMAND_TODO = "todo";
-    private static final String COMMAND_DEADLINE = "deadline";
-    private static final String COMMAND_EVENT = "event";
-    private static final String LINE = "____________________________________________________________\n";
-    private static final String PREFIX_MESSAGE = " ";
-    private static final String PREFIX_TASK = "  ";
-    private static final String[] MESSAGE_HELLO = {"Hello! I'm Skylee!", "What can I do for you?"};
-    private static final String MESSAGE_BYE = "Bye. Hope to see you again soon!";
-    public static final String MESSAGE_UNKNOWN_COMMAND = "I'm sorry, but I don't know what that means :-(";
-    public static final String MESSAGE_ID_FORMAT = "Task ID must be an integer.";
-    public static final String MESSAGE_ID_OUT_OF_RANGE = "Task ID is out of range.";
-    public static final String MESSAGE_LIST = "Here are the tasks in your list:";
-    public static final String MESSAGE_UNMARK = "OK, I've marked this task as not done yet:";
-    public static final String MESSAGE_MARK = "Nice! I've marked this task as done:";
-    public static final String MESSAGE_ADD = "Got it. I've added this task:";
-    public static final String MESSAGE_COUNT = "Now you have %d task%s in the list.";
     private static Task[] tasks = new Task[100];
     private static int taskCount = 0;
 
@@ -67,14 +70,14 @@ public class Skylee {
     }
 
     private static String[] markTask(String commandArgs) throws SkyleeException {
-        int taskId = parseTaskId(commandArgs);
+        final int taskId = parseTaskId(commandArgs);
         tasks[taskId].markAsDone();
         return new String[]{MESSAGE_MARK,
                 PREFIX_TASK + tasks[taskId]};
     }
 
     private static String[] unmarkTask(String commandArgs) throws SkyleeException {
-        int taskId = parseTaskId(commandArgs);
+        final int taskId = parseTaskId(commandArgs);
         tasks[taskId].unmarkAsNotDone();
         return new String[]{MESSAGE_UNMARK,
                 PREFIX_TASK + tasks[taskId]};

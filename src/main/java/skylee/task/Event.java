@@ -1,15 +1,17 @@
 package skylee.task;
 
-import skylee.SkyleeException;
+import skylee.exception.SkyleeException;
+
+import static skylee.io.Message.MESSAGE_FROM_MISSING;
+import static skylee.io.Message.MESSAGE_TO_MISSING;
+import static skylee.io.Message.MESSAGE_EVENT_EMPTY;
+import static skylee.io.Message.MESSAGE_FROM_EMPTY;
+import static skylee.io.Message.MESSAGE_TO_EMPTY;
+
+import static skylee.io.Parameter.PARAMETER_FROM;
+import static skylee.io.Parameter.PARAMETER_TO;
 
 public class Event extends Task {
-    public static final String PARAMETER_FROM = "/from";
-    public static final String PARAMETER_TO = "/to";
-    public static final String MESSAGE_FROM_MISSING = "The \"from\" field is missing.";
-    public static final String MESSAGE_TO_MISSING = "The \"to\" field is missing.";
-    public static final String MESSAGE_EVENT_EMPTY = "The \"description\" field of an event cannot be empty.";
-    public static final String MESSAGE_FROM_EMPTY = "The \"from\" field of an event cannot be empty.";
-    public static final String MESSAGE_TO_EMPTY = "The \"to\" field of an event cannot be empty.";
     protected String from;
     protected String to;
 

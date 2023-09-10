@@ -1,11 +1,10 @@
 package skylee.task;
 
-import skylee.SkyleeException;
+import skylee.exception.SkyleeException;
+
+import static skylee.io.Message.MESSAGE_TODO_EMPTY;
 
 public class Todo extends Task {
-
-    public static final String MESSAGE_TODO_EMPTY = "The \"description\" field of a todo cannot be empty.";
-
     public static Todo parseTodo(String commandArgs) throws SkyleeException {
         final String description = commandArgs;
         if (description.isEmpty()) {
