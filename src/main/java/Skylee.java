@@ -2,58 +2,53 @@ import java.util.Scanner;
 
 public class Skylee {
     private static final String LINE = "____________________________________________________________\n";
-    private static final String HELLO_MESSAGE = LINE + " Hello! I'm Skylee!\n What can I do for you?\n" + LINE;
-    private static final String BYE_MESSAGE = LINE + " Bye. Hope to see you again soon!\n" + LINE;
+    private static final String MESSAGE_INDENT = " ";
+    private static final String TASK_INDENT = "  ";
+    private static final String EXCEPTION_PREFIX = "☹ OOPS!!! ";
+    private static final String[] HELLO_MESSAGE = {"Hello! I'm Skylee!", "What can I do for you?"};
+    private static final String BYE_MESSAGE = "Bye. Hope to see you again soon!";
     private static Task[] tasks = new Task[100];
     private static int taskCount = 0;
 
-    private static void addTaskAndPrint(Task task) {
-        tasks[taskCount] = task;
-        taskCount++;
+    private static void showMessages(String... messages) {
         System.out.print(LINE);
-        System.out.println(" Got it. I've added this task:");
-        System.out.println("   " + task);
-        System.out.println(" Now you have " + taskCount + " task" + (taskCount > 1 ? "s" : "") + " in the list.");
-        System.out.println(LINE);
-    }
-
-    private static void markAndPrint(Task task) {
-        task.markAsDone();
-        System.out.print(LINE);
-        System.out.println(" Nice! I've marked this task as done:");
-        System.out.println("   " + task);
-        System.out.println(LINE);
-    }
-
-    private static void unmarkAndPrint(Task task) {
-        task.unmarkAsNotDone();
-        System.out.print(LINE);
-        System.out.println(" OK, I've marked this task as not done yet:");
-        System.out.println("   " + task);
-        System.out.println(LINE);
-    }
-
-    private static void printTasks() {
-        System.out.print(LINE);
-        System.out.println(" Here are the tasks in your list:");
-        for (int i = 0; i < taskCount; i++) {
-            System.out.println(" " + (i + 1) + "." + tasks[i]);
+        for (String message : messages) {
+            System.out.println(MESSAGE_INDENT + message);
         }
         System.out.println(LINE);
     }
 
-    private static void printException(String message) {
-        System.out.print(LINE);
-        System.out.println(" ☹ OOPS!!! " + message);
-        System.out.println(LINE);
+    private static String[] addTask(Task task) {
+        tasks[taskCount] = task;
+        taskCount++;
+        return new String[]{"Got it. I've added this task:",
+                TASK_INDENT + task,
+                "Now you have " + taskCount + " task" + (taskCount > 1 ? "s" : "") + " in the list."};
     }
 
-    private static void printHelloMessage() {
-        System.out.println(HELLO_MESSAGE);
+    private static String[] markTask(Task task) {
+        task.markAsDone();
+        return new String[]{"Nice! I've marked this task as done:",
+                TASK_INDENT + task};
     }
 
-    private static void printByeMessage() {
-        System.out.println(BYE_MESSAGE);
+    private static String[] unmarkTask(Task task) {
+        task.unmarkAsNotDone();
+        return new String[]{"OK, I've marked this task as not done yet:",
+                TASK_INDENT + task};
+    }
+
+    private static String[] listTasks() {
+        String[] messages = new String[taskCount + 1];
+        messages[0] = "Here are the tasks in your list:";
+        for (int i = 0; i < taskCount; i++) {
+            messages[i + 1] = (i + 1) + "." + tasks[i];
+        }
+        return messages;
+    }
+
+    private static String[] showException(String message) {
+        return new String[]{EXCEPTION_PREFIX + message};
     }
 
     private static String[] splitCommandWordAndArgs(String rawUserInput) {
@@ -61,63 +56,58 @@ public class Skylee {
         return split.length == 2 ? split : new String[] { split[0] , "" };
     }
     
-    private static void executeCommand(String userInputString) {
+    private static String[] executeCommand(String userInputString) {
         final String[] commandTypeAndParams = splitCommandWordAndArgs(userInputString);
         final String commandType = commandTypeAndParams[0];
         final String commandArgs = commandTypeAndParams[1];
         try {
             switch (commandType) {
             case "bye":
-                printByeMessage();
+                showMessages(BYE_MESSAGE);
                 System.exit(0);
-                break;
             case "list":
-                printTasks();
-                break;
+                return listTasks();
             case "mark":
                 try {
                     int taskId = Integer.parseInt(commandArgs) - 1;
                     if (taskId < 0 || taskId >= taskCount) {
                         throw new SkyleeException("Task ID is out of range.");
                     }
-                    markAndPrint(tasks[taskId]);
+                    return markTask(tasks[taskId]);
                 } catch (NumberFormatException e) {
                     throw new SkyleeException("Task ID must be an integer.");
                 }
-                break;
             case "unmark":
                 try {
                     int taskId = Integer.parseInt(commandArgs) - 1;
                     if (taskId < 0 || taskId >= taskCount) {
                         throw new SkyleeException("Task ID is out of range.");
                     }
-                    unmarkAndPrint(tasks[taskId]);
+                    return unmarkTask(tasks[taskId]);
                 } catch (NumberFormatException e) {
                     throw new SkyleeException("Task ID must be an integer.");
                 }
-                break;
             case "todo":
-                addTaskAndPrint(Todo.parseTodo(commandArgs));
-                break;
+                return addTask(Todo.parseTodo(commandArgs));
             case "deadline":
-                addTaskAndPrint(Deadline.parseDeadline(commandArgs));
-                break;
+                return addTask(Deadline.parseDeadline(commandArgs));
             case "event":
-                addTaskAndPrint(Event.parseEvent(commandArgs));
-                break;
+                return addTask(Event.parseEvent(commandArgs));
             default:
                 throw new SkyleeException("I'm sorry, but I don't know what that means :-(");
             }
         } catch (SkyleeException e) {
-            printException(e.getMessage());
+            return showException(e.getMessage());
         }
     }
 
     public static void main(String[] args) {
-        printHelloMessage();
+        showMessages(HELLO_MESSAGE);
         Scanner scanner = new Scanner(System.in);
         for (;;) {
-            executeCommand(scanner.nextLine());
+            final String command = scanner.nextLine();
+            final String[] feedback = executeCommand(command);
+            showMessages(feedback);
         }
     }
 }
