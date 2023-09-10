@@ -1,3 +1,7 @@
+package skylee.task;
+
+import skylee.SkyleeException;
+
 public class Event extends Task {
     public static final String PARAMETER_FROM = "/from";
     public static final String PARAMETER_TO = "/to";

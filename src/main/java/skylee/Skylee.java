@@ -1,3 +1,10 @@
+package skylee;
+
+import skylee.task.Deadline;
+import skylee.task.Event;
+import skylee.task.Task;
+import skylee.task.Todo;
+
 import java.util.Scanner;
 
 public class Skylee {

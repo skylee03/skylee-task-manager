@@ -1,3 +1,7 @@
+package skylee.task;
+
+import skylee.SkyleeException;
+
 public class Deadline extends Task {
     public static final String PARAMETER_BY = "/by";
     public static final String MESSAGE_BY_MISSING = "The \"by\" field is missing.";
