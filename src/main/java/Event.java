@@ -1,27 +1,34 @@
 public class Event extends Task {
+    public static final String PARAMETER_FROM = "/from";
+    public static final String PARAMETER_TO = "/to";
+    public static final String MESSAGE_FROM_MISSING = "The \"from\" field is missing.";
+    public static final String MESSAGE_TO_MISSING = "The \"to\" field is missing.";
+    public static final String MESSAGE_EVENT_EMPTY = "The \"description\" field of an event cannot be empty.";
+    public static final String MESSAGE_FROM_EMPTY = "The \"from\" field of an event cannot be empty.";
+    public static final String MESSAGE_TO_EMPTY = "The \"to\" field of an event cannot be empty.";
     protected String from;
     protected String to;
 
     public static Event parseEvent(String commandArgs) throws SkyleeException {
-        final int fromIndex = commandArgs.indexOf("/from");
-        final int toIndex = commandArgs.indexOf("/to");
+        final int fromIndex = commandArgs.indexOf(PARAMETER_FROM);
+        final int toIndex = commandArgs.indexOf(PARAMETER_TO);
         if (fromIndex == -1) {
-            throw new SkyleeException("The \"from\" field is missing.");
+            throw new SkyleeException(MESSAGE_FROM_MISSING);
         }
         if (toIndex == -1) {
-            throw new SkyleeException("The \"to\" field is missing.");
+            throw new SkyleeException(MESSAGE_TO_MISSING);
         }
         final String description = commandArgs.substring(0, fromIndex).trim();
-        final String from = commandArgs.substring(fromIndex + "/from".length(), toIndex).trim();
-        final String to = commandArgs.substring(toIndex + "/to".length()).trim();
+        final String from = commandArgs.substring(fromIndex + PARAMETER_FROM.length(), toIndex).trim();
+        final String to = commandArgs.substring(toIndex + PARAMETER_TO.length()).trim();
         if (description.isEmpty()) {
-            throw new SkyleeException("The \"description\" field of an event cannot be empty.");
+            throw new SkyleeException(MESSAGE_EVENT_EMPTY);
         }
         if (from.isEmpty()) {
-            throw new SkyleeException("The \"from\" field of an event cannot be empty.");
+            throw new SkyleeException(MESSAGE_FROM_EMPTY);
         }
         if (to.isEmpty()) {
-            throw new SkyleeException("The \"to\" field of an event cannot be empty.");
+            throw new SkyleeException(MESSAGE_TO_EMPTY);
         }
         return new Event(description, from, to);
     }
