@@ -7,6 +7,13 @@ public class Skylee {
     private static final String EXCEPTION_PREFIX = "☹ OOPS!!! ";
     private static final String[] HELLO_MESSAGE = {"Hello! I'm Skylee!", "What can I do for you?"};
     private static final String BYE_MESSAGE = "Bye. Hope to see you again soon!";
+    private static final String COMMAND_BYE = "bye";
+    private static final String COMMAND_LIST = "list";
+    private static final String COMMAND_MARK = "mark";
+    private static final String COMMAND_UNMARK = "unmark";
+    private static final String COMMAND_TODO = "todo";
+    private static final String COMMAND_DEADLINE = "deadline";
+    private static final String COMMAND_EVENT = "event";
     private static Task[] tasks = new Task[100];
     private static int taskCount = 0;
 
@@ -62,12 +69,12 @@ public class Skylee {
         final String commandArgs = commandTypeAndParams[1];
         try {
             switch (commandType) {
-            case "bye":
+            case COMMAND_BYE:
                 showMessages(BYE_MESSAGE);
                 System.exit(0);
-            case "list":
+            case COMMAND_LIST:
                 return listTasks();
-            case "mark":
+            case COMMAND_MARK:
                 try {
                     int taskId = Integer.parseInt(commandArgs) - 1;
                     if (taskId < 0 || taskId >= taskCount) {
@@ -77,7 +84,7 @@ public class Skylee {
                 } catch (NumberFormatException e) {
                     throw new SkyleeException("Task ID must be an integer.");
                 }
-            case "unmark":
+            case COMMAND_UNMARK:
                 try {
                     int taskId = Integer.parseInt(commandArgs) - 1;
                     if (taskId < 0 || taskId >= taskCount) {
@@ -87,11 +94,11 @@ public class Skylee {
                 } catch (NumberFormatException e) {
                     throw new SkyleeException("Task ID must be an integer.");
                 }
-            case "todo":
+            case COMMAND_TODO:
                 return addTask(Todo.parseTodo(commandArgs));
-            case "deadline":
+            case COMMAND_DEADLINE:
                 return addTask(Deadline.parseDeadline(commandArgs));
-            case "event":
+            case COMMAND_EVENT:
                 return addTask(Event.parseEvent(commandArgs));
             default:
                 throw new SkyleeException("I'm sorry, but I don't know what that means :-(");
