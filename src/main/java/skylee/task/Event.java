@@ -1,6 +1,7 @@
 package skylee.task;
 
 import skylee.exception.SkyleeException;
+import skylee.io.Config;
 
 import static skylee.io.Message.MESSAGE_FROM_MISSING;
 import static skylee.io.Message.MESSAGE_TO_MISSING;
@@ -12,6 +13,8 @@ import static skylee.io.Parameter.PARAMETER_FROM;
 import static skylee.io.Parameter.PARAMETER_TO;
 
 public class Event extends Task {
+    public static final String type = "E";
+
     protected String from;
     protected String to;
 
@@ -45,8 +48,19 @@ public class Event extends Task {
         this.to = to;
     }
 
+    public Event(String description, String from, String to, boolean isDone) {
+        super(description, isDone);
+        this.from = from;
+        this.to = to;
+    }
+
     @Override
     public String toString() {
-        return "[E]" + super.toString() + " (from: " + from + " to: " + to + ")";
+        return "[" + type + "]" + super.toString() + " (from: " + from + " to: " + to + ")";
+    }
+
+    @Override
+    public String show() {
+        return String.join(Config.DELIMITER, type, isDone() ? "1" : "0", getDescription(), from, to);
     }
 }

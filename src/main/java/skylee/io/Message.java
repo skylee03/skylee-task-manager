@@ -25,4 +25,6 @@ public class Message {
     public static final String MESSAGE_EVENT_EMPTY = "The \"description\" field of an event cannot be empty.";
     public static final String MESSAGE_FROM_EMPTY = "The \"from\" field of an event cannot be empty.";
     public static final String MESSAGE_TO_EMPTY = "The \"to\" field of an event cannot be empty.";
+    public static final String MESSAGE_FILE_FORMAT_ERROR = "The file is not in the expected format.";
+    public static final String MESSAGE_IO_EXCEPTION = "An I/O exception occurred.";
 }

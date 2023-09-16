@@ -1,11 +1,15 @@
 package skylee;
 
 import skylee.exception.SkyleeException;
+import skylee.io.Config;
 import skylee.task.Deadline;
 import skylee.task.Event;
 import skylee.task.Task;
 import skylee.task.Todo;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -33,6 +37,7 @@ import static skylee.io.Message.MESSAGE_MARK;
 import static skylee.io.Message.MESSAGE_DELETE;
 import static skylee.io.Message.MESSAGE_ADD;
 import static skylee.io.Message.MESSAGE_COUNT;
+import static skylee.io.Message.MESSAGE_IO_EXCEPTION;
 
 public class Skylee {
     private static ArrayList<Task> tasks = new ArrayList<>();
@@ -45,7 +50,37 @@ public class Skylee {
         System.out.println(LINE);
     }
 
-    private static void bye() {
+    private static void loadFile() {
+        try {
+            File file = new File(Config.PATH_SAVE);
+            Scanner scanner = new Scanner(file);
+            while (scanner.hasNextLine()) {
+                tasks.add(Task.parseTask(scanner.nextLine()));
+            }
+        } catch (Exception e) {
+            tasks = new ArrayList<>();
+        }
+    }
+
+    private static void saveFile() throws SkyleeException {
+        try {
+            File file = new File(Config.PATH_SAVE);
+            if (!file.exists()) {
+                file.getParentFile().mkdirs();
+                file.createNewFile();
+            }
+            FileWriter fileWriter = new FileWriter(file);
+            for (Task task: tasks) {
+                fileWriter.write(task.show() + "\n");
+            }
+            fileWriter.close();
+        } catch (IOException e) {
+            throw new SkyleeException(MESSAGE_IO_EXCEPTION);
+        }
+    }
+
+    private static void bye() throws SkyleeException {
+        saveFile();
         showMessages(MESSAGE_BYE);
         System.exit(0);
     }
@@ -143,6 +178,7 @@ public class Skylee {
     }
 
     public static void main(String[] args) {
+        loadFile();
         showMessages(MESSAGE_HELLO);
         Scanner scanner = new Scanner(System.in);
         for (;;) {
