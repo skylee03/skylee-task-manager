@@ -6,6 +6,7 @@ import skylee.task.Event;
 import skylee.task.Task;
 import skylee.task.Todo;
 
+import java.util.ArrayList;
 import java.util.Scanner;
 
 import static skylee.io.Command.COMMAND_BYE;
@@ -15,6 +16,7 @@ import static skylee.io.Command.COMMAND_UNMARK;
 import static skylee.io.Command.COMMAND_TODO;
 import static skylee.io.Command.COMMAND_DEADLINE;
 import static skylee.io.Command.COMMAND_EVENT;
+import static skylee.io.Command.COMMAND_DELETE;
 
 import static skylee.io.Message.LINE;
 import static skylee.io.Message.PREFIX_MESSAGE;
@@ -28,12 +30,12 @@ import static skylee.io.Message.MESSAGE_ID_OUT_OF_RANGE;
 import static skylee.io.Message.MESSAGE_LIST;
 import static skylee.io.Message.MESSAGE_UNMARK;
 import static skylee.io.Message.MESSAGE_MARK;
+import static skylee.io.Message.MESSAGE_DELETE;
 import static skylee.io.Message.MESSAGE_ADD;
 import static skylee.io.Message.MESSAGE_COUNT;
 
 public class Skylee {
-    private static Task[] tasks = new Task[100];
-    private static int taskCount = 0;
+    private static ArrayList<Task> tasks = new ArrayList<>();
 
     private static void showMessages(String... messages) {
         System.out.print(LINE);
@@ -49,11 +51,10 @@ public class Skylee {
     }
 
     private static String[] addTask(Task task) {
-        tasks[taskCount] = task;
-        taskCount++;
+        tasks.add(task);
         return new String[]{MESSAGE_ADD,
                 PREFIX_TASK + task,
-                String.format(MESSAGE_COUNT, taskCount, taskCount > 1 ? "s" : "")};
+                String.format(MESSAGE_COUNT, tasks.size(), tasks.size() > 1 ? "s" : "")};
     }
 
     private static int parseTaskId(String commandArgs) throws SkyleeException {
@@ -63,7 +64,7 @@ public class Skylee {
         } catch (NumberFormatException e) {
             throw new SkyleeException(MESSAGE_ID_FORMAT);
         }
-        if (taskId < 0 || taskId >= taskCount) {
+        if (taskId < 0 || taskId >= tasks.size()) {
             throw new SkyleeException(MESSAGE_ID_OUT_OF_RANGE);
         }
         return taskId;
@@ -71,25 +72,34 @@ public class Skylee {
 
     private static String[] markTask(String commandArgs) throws SkyleeException {
         final int taskId = parseTaskId(commandArgs);
-        tasks[taskId].markAsDone();
+        tasks.get(taskId).markAsDone();
         return new String[]{MESSAGE_MARK,
-                PREFIX_TASK + tasks[taskId]};
+                PREFIX_TASK + tasks.get(taskId)};
     }
 
     private static String[] unmarkTask(String commandArgs) throws SkyleeException {
         final int taskId = parseTaskId(commandArgs);
-        tasks[taskId].unmarkAsNotDone();
+        tasks.get(taskId).unmarkAsNotDone();
         return new String[]{MESSAGE_UNMARK,
-                PREFIX_TASK + tasks[taskId]};
+                PREFIX_TASK + tasks.get(taskId)};
     }
 
     private static String[] listTasks() {
-        String[] messages = new String[taskCount + 1];
+        String[] messages = new String[tasks.size() + 1];
         messages[0] = MESSAGE_LIST;
-        for (int i = 0; i < taskCount; i++) {
-            messages[i + 1] = (i + 1) + "." + tasks[i];
+        for (int i = 0; i < tasks.size(); i++) {
+            messages[i + 1] = (i + 1) + "." + tasks.get(i);
         }
         return messages;
+    }
+
+    private static String[] deleteTask(String commandArgs) throws SkyleeException {
+        final int taskId = parseTaskId(commandArgs);
+        final Task task = tasks.get(taskId);
+        tasks.remove(taskId);
+        return new String[]{MESSAGE_DELETE,
+                PREFIX_TASK + task,
+                String.format(MESSAGE_COUNT, tasks.size(), tasks.size() > 1 ? "s" : "")};
     }
 
     private static String[] showException(String message) {
@@ -122,6 +132,8 @@ public class Skylee {
                 return addTask(Deadline.parseDeadline(commandArgs));
             case COMMAND_EVENT:
                 return addTask(Event.parseEvent(commandArgs));
+            case COMMAND_DELETE:
+                return deleteTask(commandArgs);
             default:
                 throw new SkyleeException(MESSAGE_UNKNOWN_COMMAND);
             }
