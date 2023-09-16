@@ -1,11 +1,17 @@
 package skylee;
 
 import skylee.exception.SkyleeException;
+import skylee.io.Config;
 import skylee.task.Deadline;
 import skylee.task.Event;
 import skylee.task.Task;
 import skylee.task.Todo;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 import static skylee.io.Command.COMMAND_BYE;
@@ -15,24 +21,10 @@ import static skylee.io.Command.COMMAND_UNMARK;
 import static skylee.io.Command.COMMAND_TODO;
 import static skylee.io.Command.COMMAND_DEADLINE;
 import static skylee.io.Command.COMMAND_EVENT;
-
-import static skylee.io.Message.LINE;
-import static skylee.io.Message.PREFIX_MESSAGE;
-import static skylee.io.Message.PREFIX_TASK;
-import static skylee.io.Message.PREFIX_EXCEPTION;
-import static skylee.io.Message.MESSAGE_HELLO;
-import static skylee.io.Message.MESSAGE_BYE;
-import static skylee.io.Message.MESSAGE_UNKNOWN_COMMAND;
-import static skylee.io.Message.MESSAGE_ID_FORMAT;
-import static skylee.io.Message.MESSAGE_ID_OUT_OF_RANGE;
-import static skylee.io.Message.MESSAGE_LIST;
-import static skylee.io.Message.MESSAGE_UNMARK;
-import static skylee.io.Message.MESSAGE_MARK;
-import static skylee.io.Message.MESSAGE_ADD;
-import static skylee.io.Message.MESSAGE_COUNT;
+import static skylee.io.Message.*;
 
 public class Skylee {
-    private static Task[] tasks = new Task[100];
+    private static Task[] tasks;
     private static int taskCount = 0;
 
     private static void showMessages(String... messages) {
@@ -43,7 +35,41 @@ public class Skylee {
         System.out.println(LINE);
     }
 
-    private static void bye() {
+    private static void loadFile() {
+        try {
+            File file = new File(Config.PATH_SAVE);
+            Scanner scanner = new Scanner(file);
+            ArrayList<Task> taskList = new ArrayList<>();
+            while (scanner.hasNextLine()) {
+                final Task task = Task.parseTask(scanner.nextLine());
+                taskList.add(task);
+            }
+            tasks = taskList.toArray(new Task[100]);
+            taskCount = taskList.size();
+        } catch (Exception e) {
+            tasks = new Task[100];
+        }
+    }
+
+    private static void saveFile() throws SkyleeException {
+        try {
+            File file = new File(Config.PATH_SAVE);
+            if (!file.exists()) {
+                file.getParentFile().mkdirs();
+                file.createNewFile();
+            }
+            FileWriter fileWriter = new FileWriter(file);
+            for (int i = 0; i < taskCount; i++) {
+                fileWriter.write(tasks[i].show());
+            }
+            fileWriter.close();
+        } catch (IOException e) {
+            throw new SkyleeException(MESSAGE_IO_EXCEPTION);
+        }
+    }
+
+    private static void bye() throws SkyleeException {
+        saveFile();
         showMessages(MESSAGE_BYE);
         System.exit(0);
     }
@@ -131,6 +157,7 @@ public class Skylee {
     }
 
     public static void main(String[] args) {
+        loadFile();
         showMessages(MESSAGE_HELLO);
         Scanner scanner = new Scanner(System.in);
         for (;;) {
