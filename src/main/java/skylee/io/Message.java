@@ -13,6 +13,7 @@ public class Message {
     public static final String MESSAGE_LIST = "Here are the tasks in your list:";
     public static final String MESSAGE_UNMARK = "OK, I've marked this task as not done yet:";
     public static final String MESSAGE_MARK = "Nice! I've marked this task as done:";
+    public static final String MESSAGE_DELETE = "Noted. I've removed this task:";
     public static final String MESSAGE_ADD = "Got it. I've added this task:";
     public static final String MESSAGE_COUNT = "Now you have %d task%s in the list.";
     public static final String MESSAGE_BY_MISSING = "The \"by\" field is missing.";
