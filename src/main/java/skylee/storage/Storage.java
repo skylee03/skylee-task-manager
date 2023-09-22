@@ -3,6 +3,7 @@ package skylee.storage;
 import skylee.exception.SkyleeException;
 import skylee.parser.Parser;
 import skylee.task.Task;
+import skylee.task.TaskList;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -27,7 +28,7 @@ public class Storage {
         }
     }
 
-    public void saveFile(ArrayList<Task> tasks) throws SkyleeException {
+    public void saveFile(TaskList tasks) throws SkyleeException {
         try {
             File file = new File(Config.PATH_SAVE);
             if (!file.exists()) {
@@ -35,9 +36,7 @@ public class Storage {
                 file.createNewFile();
             }
             FileWriter fileWriter = new FileWriter(file);
-            for (Task task: tasks) {
-                fileWriter.write(task.show() + "\n");
-            }
+            fileWriter.write(tasks.show());
             fileWriter.close();
         } catch (IOException e) {
             throw new SkyleeException(MESSAGE_IO_EXCEPTION);

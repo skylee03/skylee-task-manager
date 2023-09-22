@@ -2,11 +2,11 @@ package skylee;
 
 import skylee.exception.SkyleeException;
 import skylee.parser.Parser;
+import skylee.storage.Config;
 import skylee.storage.Storage;
 import skylee.task.Task;
+import skylee.task.TaskList;
 import skylee.ui.Ui;
-
-import java.util.ArrayList;
 
 import static skylee.parser.Command.COMMAND_BYE;
 import static skylee.parser.Command.COMMAND_LIST;
@@ -31,10 +31,10 @@ import static skylee.ui.Message.MESSAGE_ADD;
 import static skylee.ui.Message.MESSAGE_COUNT;
 
 public class Skylee {
-    private static ArrayList<Task> tasks = new ArrayList<>();
     private Ui ui;
     private Storage storage;
     private Parser parser;
+    private TaskList tasks;
 
     private void bye() throws SkyleeException {
         storage.saveFile(tasks);
@@ -42,14 +42,14 @@ public class Skylee {
         System.exit(0);
     }
 
-    private static String[] addTask(Task task) {
+    private String[] addTask(Task task) {
         tasks.add(task);
         return new String[]{MESSAGE_ADD,
                 PREFIX_TASK + task,
                 String.format(MESSAGE_COUNT, tasks.size(), tasks.size() > 1 ? "s" : "")};
     }
 
-    private static String[] markTask(String commandArgs) throws SkyleeException {
+    private String[] markTask(String commandArgs) throws SkyleeException {
         final int taskId = Parser.parseTaskId(commandArgs);
         if (taskId < 0 || taskId >= tasks.size()) {
             throw new SkyleeException(MESSAGE_ID_OUT_OF_RANGE);
@@ -59,7 +59,7 @@ public class Skylee {
                 PREFIX_TASK + tasks.get(taskId)};
     }
 
-    private static String[] unmarkTask(String commandArgs) throws SkyleeException {
+    private String[] unmarkTask(String commandArgs) throws SkyleeException {
         final int taskId = Parser.parseTaskId(commandArgs);
         if (taskId < 0 || taskId >= tasks.size()) {
             throw new SkyleeException(MESSAGE_ID_OUT_OF_RANGE);
@@ -69,7 +69,7 @@ public class Skylee {
                 PREFIX_TASK + tasks.get(taskId)};
     }
 
-    private static String[] listTasks() {
+    private String[] listTasks() {
         String[] messages = new String[tasks.size() + 1];
         messages[0] = MESSAGE_LIST;
         for (int i = 0; i < tasks.size(); i++) {
@@ -78,7 +78,7 @@ public class Skylee {
         return messages;
     }
 
-    private static String[] deleteTask(String commandArgs) throws SkyleeException {
+    private String[] deleteTask(String commandArgs) throws SkyleeException {
         final int taskId = Parser.parseTaskId(commandArgs);
         if (taskId < 0 || taskId >= tasks.size()) {
             throw new SkyleeException(MESSAGE_ID_OUT_OF_RANGE);
@@ -125,12 +125,17 @@ public class Skylee {
         }
     }
 
+    public Skylee() {
+        ui = new Ui();
+        storage = new Storage();
+        tasks = (TaskList) storage.loadFile();
+    }
+
     public static void main(String[] args) {
         new Skylee().run();
     }
 
     public void run() {
-        tasks = storage.loadFile();
         ui.showMessages(MESSAGE_HELLO);
         for (;;) {
             final String command = ui.getUserCommand();
