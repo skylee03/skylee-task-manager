@@ -1,5 +1,7 @@
 package skylee.task;
 
+import java.time.LocalDate;
+
 abstract public class Task {
     private String description;
 
@@ -34,5 +36,9 @@ abstract public class Task {
 
     public String toString() {
         return "[" + getStatusIcon() + "] " + getDescription();
+    }
+
+    public boolean isOccurringOn(LocalDate date) {
+        return false;
     }
 }

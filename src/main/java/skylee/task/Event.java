@@ -2,6 +2,7 @@ package skylee.task;
 
 import skylee.storage.Config;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import static skylee.storage.Config.DATE_TIME_FORMAT;
@@ -34,5 +35,13 @@ public class Event extends Task {
     public String show() {
         return String.join(Config.DELIMITER, type, isDone() ? "1" : "0",
                 getDescription(), from.toString(), to.toString());
+    }
+
+    @Override
+    public boolean isOccurringOn(LocalDate date) {
+        LocalDate fromDate = from.toLocalDate();
+        LocalDate toDate = to.toLocalDate();
+        return (date.isEqual(fromDate) || date.isAfter(fromDate))
+                && (date.isEqual(toDate) || date.isBefore(toDate));
     }
 }
