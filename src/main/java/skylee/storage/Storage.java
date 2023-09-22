@@ -1,6 +1,7 @@
 package skylee.storage;
 
 import skylee.exception.SkyleeException;
+import skylee.parser.Parser;
 import skylee.task.Task;
 
 import java.io.File;
@@ -18,7 +19,7 @@ public class Storage {
             File file = new File(Config.PATH_SAVE);
             Scanner scanner = new Scanner(file);
             while (scanner.hasNextLine()) {
-                tasks.add(Task.parseTask(scanner.nextLine()));
+                tasks.add(Parser.parseTask(scanner.nextLine()));
             }
             return tasks;
         } catch (Exception e) {

@@ -1,35 +1,27 @@
 package skylee;
 
 import skylee.exception.SkyleeException;
-import skylee.storage.Config;
+import skylee.parser.Parser;
 import skylee.storage.Storage;
-import skylee.task.Deadline;
-import skylee.task.Event;
 import skylee.task.Task;
-import skylee.task.Todo;
 import skylee.ui.Ui;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Scanner;
 
-import static skylee.storage.Command.COMMAND_BYE;
-import static skylee.storage.Command.COMMAND_LIST;
-import static skylee.storage.Command.COMMAND_MARK;
-import static skylee.storage.Command.COMMAND_UNMARK;
-import static skylee.storage.Command.COMMAND_TODO;
-import static skylee.storage.Command.COMMAND_DEADLINE;
-import static skylee.storage.Command.COMMAND_EVENT;
-import static skylee.storage.Command.COMMAND_DELETE;
+import static skylee.parser.Command.COMMAND_BYE;
+import static skylee.parser.Command.COMMAND_LIST;
+import static skylee.parser.Command.COMMAND_MARK;
+import static skylee.parser.Command.COMMAND_UNMARK;
+import static skylee.parser.Command.COMMAND_TODO;
+import static skylee.parser.Command.COMMAND_DEADLINE;
+import static skylee.parser.Command.COMMAND_EVENT;
+import static skylee.parser.Command.COMMAND_DELETE;
 
 import static skylee.ui.Message.PREFIX_TASK;
 import static skylee.ui.Message.PREFIX_EXCEPTION;
 import static skylee.ui.Message.MESSAGE_HELLO;
 import static skylee.ui.Message.MESSAGE_BYE;
 import static skylee.ui.Message.MESSAGE_UNKNOWN_COMMAND;
-import static skylee.ui.Message.MESSAGE_ID_FORMAT;
 import static skylee.ui.Message.MESSAGE_ID_OUT_OF_RANGE;
 import static skylee.ui.Message.MESSAGE_LIST;
 import static skylee.ui.Message.MESSAGE_UNMARK;
@@ -37,12 +29,12 @@ import static skylee.ui.Message.MESSAGE_MARK;
 import static skylee.ui.Message.MESSAGE_DELETE;
 import static skylee.ui.Message.MESSAGE_ADD;
 import static skylee.ui.Message.MESSAGE_COUNT;
-import static skylee.ui.Message.MESSAGE_IO_EXCEPTION;
 
 public class Skylee {
     private static ArrayList<Task> tasks = new ArrayList<>();
     private Ui ui;
     private Storage storage;
+    private Parser parser;
 
     private void bye() throws SkyleeException {
         storage.saveFile(tasks);
@@ -57,28 +49,21 @@ public class Skylee {
                 String.format(MESSAGE_COUNT, tasks.size(), tasks.size() > 1 ? "s" : "")};
     }
 
-    private static int parseTaskId(String commandArgs) throws SkyleeException {
-        int taskId;
-        try {
-            taskId = Integer.parseInt(commandArgs) - 1;
-        } catch (NumberFormatException e) {
-            throw new SkyleeException(MESSAGE_ID_FORMAT);
-        }
+    private static String[] markTask(String commandArgs) throws SkyleeException {
+        final int taskId = Parser.parseTaskId(commandArgs);
         if (taskId < 0 || taskId >= tasks.size()) {
             throw new SkyleeException(MESSAGE_ID_OUT_OF_RANGE);
         }
-        return taskId;
-    }
-
-    private static String[] markTask(String commandArgs) throws SkyleeException {
-        final int taskId = parseTaskId(commandArgs);
         tasks.get(taskId).markAsDone();
         return new String[]{MESSAGE_MARK,
                 PREFIX_TASK + tasks.get(taskId)};
     }
 
     private static String[] unmarkTask(String commandArgs) throws SkyleeException {
-        final int taskId = parseTaskId(commandArgs);
+        final int taskId = Parser.parseTaskId(commandArgs);
+        if (taskId < 0 || taskId >= tasks.size()) {
+            throw new SkyleeException(MESSAGE_ID_OUT_OF_RANGE);
+        }
         tasks.get(taskId).unmarkAsNotDone();
         return new String[]{MESSAGE_UNMARK,
                 PREFIX_TASK + tasks.get(taskId)};
@@ -94,7 +79,10 @@ public class Skylee {
     }
 
     private static String[] deleteTask(String commandArgs) throws SkyleeException {
-        final int taskId = parseTaskId(commandArgs);
+        final int taskId = Parser.parseTaskId(commandArgs);
+        if (taskId < 0 || taskId >= tasks.size()) {
+            throw new SkyleeException(MESSAGE_ID_OUT_OF_RANGE);
+        }
         final Task task = tasks.get(taskId);
         tasks.remove(taskId);
         return new String[]{MESSAGE_DELETE,
@@ -105,14 +93,9 @@ public class Skylee {
     private static String[] showException(String message) {
         return new String[]{PREFIX_EXCEPTION + message};
     }
-
-    private static String[] splitCommandWordAndArgs(String rawUserInput) {
-        final String[] split = rawUserInput.trim().split("\\s+", 2);
-        return split.length == 2 ? split : new String[] { split[0] , "" };
-    }
     
     private String[] executeCommand(String userInputString) {
-        final String[] commandTypeAndParams = splitCommandWordAndArgs(userInputString);
+        final String[] commandTypeAndParams = parser.splitCommandWordAndArgs(userInputString);
         final String commandType = commandTypeAndParams[0];
         final String commandArgs = commandTypeAndParams[1];
         try {
@@ -127,11 +110,11 @@ public class Skylee {
             case COMMAND_UNMARK:
                 return unmarkTask(commandArgs);
             case COMMAND_TODO:
-                return addTask(Todo.parseTodo(commandArgs));
+                return addTask(Parser.parseTodo(commandArgs));
             case COMMAND_DEADLINE:
-                return addTask(Deadline.parseDeadline(commandArgs));
+                return addTask(Parser.parseDeadline(commandArgs));
             case COMMAND_EVENT:
-                return addTask(Event.parseEvent(commandArgs));
+                return addTask(Parser.parseEvent(commandArgs));
             case COMMAND_DELETE:
                 return deleteTask(commandArgs);
             default:
@@ -149,7 +132,6 @@ public class Skylee {
     public void run() {
         tasks = storage.loadFile();
         ui.showMessages(MESSAGE_HELLO);
-        Scanner scanner = new Scanner(System.in);
         for (;;) {
             final String command = ui.getUserCommand();
             final String[] feedback = executeCommand(command);

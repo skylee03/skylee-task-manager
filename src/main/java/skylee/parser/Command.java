@@ -1,4 +1,4 @@
-package skylee.storage;
+package skylee.parser;
 
 public class Command {
     public static final String COMMAND_BYE = "bye";

@@ -1,10 +1,5 @@
 package skylee.task;
 
-import skylee.exception.SkyleeException;
-import skylee.storage.Config;
-
-import static skylee.ui.Message.MESSAGE_FILE_FORMAT_ERROR;
-
 abstract public class Task {
     private String description;
 
@@ -47,29 +42,5 @@ abstract public class Task {
 
     public String toString() {
         return "[" + getStatusIcon() + "] " + getDescription();
-    }
-
-    public static Task parseTask(String line) throws SkyleeException {
-        String[] fields = line.split(Config.DELIMITER_REGEX);
-        boolean isDone = Integer.parseInt(fields[1]) != 0;
-        switch (fields[0]) {
-        case Todo.type:
-            if (fields.length != 3) {
-                throw new SkyleeException(MESSAGE_FILE_FORMAT_ERROR);
-            }
-            return new Todo(fields[2], isDone);
-        case Deadline.type:
-            if (fields.length != 4) {
-                throw new SkyleeException(MESSAGE_FILE_FORMAT_ERROR);
-            }
-            return new Deadline(fields[2], fields[3], isDone);
-        case Event.type:
-            if (fields.length != 5) {
-                throw new SkyleeException(MESSAGE_FILE_FORMAT_ERROR);
-            }
-            return new Event(fields[2], fields[3], fields[4], isDone);
-        default:
-            throw new SkyleeException(MESSAGE_FILE_FORMAT_ERROR);
-        }
     }
 }

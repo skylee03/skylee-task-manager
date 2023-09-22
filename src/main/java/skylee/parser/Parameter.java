@@ -1,4 +1,4 @@
-package skylee.storage;
+package skylee.parser;
 
 public class Parameter {
     public static final String PARAMETER_BY = "/by";
