@@ -1,7 +1,7 @@
 package skylee.task;
 
 import skylee.exception.SkyleeException;
-import skylee.io.Config;
+import skylee.storage.Config;
 
 import static skylee.ui.Message.MESSAGE_TODO_EMPTY;
 

@@ -1,7 +1,7 @@
 package skylee.task;
 
 import skylee.exception.SkyleeException;
-import skylee.io.Config;
+import skylee.storage.Config;
 
 import static skylee.ui.Message.MESSAGE_FROM_MISSING;
 import static skylee.ui.Message.MESSAGE_TO_MISSING;
@@ -9,8 +9,8 @@ import static skylee.ui.Message.MESSAGE_EVENT_EMPTY;
 import static skylee.ui.Message.MESSAGE_FROM_EMPTY;
 import static skylee.ui.Message.MESSAGE_TO_EMPTY;
 
-import static skylee.io.Parameter.PARAMETER_FROM;
-import static skylee.io.Parameter.PARAMETER_TO;
+import static skylee.storage.Parameter.PARAMETER_FROM;
+import static skylee.storage.Parameter.PARAMETER_TO;
 
 public class Event extends Task {
     public static final String type = "E";

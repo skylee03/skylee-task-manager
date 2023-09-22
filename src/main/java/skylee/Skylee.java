@@ -1,7 +1,8 @@
 package skylee;
 
 import skylee.exception.SkyleeException;
-import skylee.io.Config;
+import skylee.storage.Config;
+import skylee.storage.Storage;
 import skylee.task.Deadline;
 import skylee.task.Event;
 import skylee.task.Task;
@@ -14,14 +15,14 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-import static skylee.io.Command.COMMAND_BYE;
-import static skylee.io.Command.COMMAND_LIST;
-import static skylee.io.Command.COMMAND_MARK;
-import static skylee.io.Command.COMMAND_UNMARK;
-import static skylee.io.Command.COMMAND_TODO;
-import static skylee.io.Command.COMMAND_DEADLINE;
-import static skylee.io.Command.COMMAND_EVENT;
-import static skylee.io.Command.COMMAND_DELETE;
+import static skylee.storage.Command.COMMAND_BYE;
+import static skylee.storage.Command.COMMAND_LIST;
+import static skylee.storage.Command.COMMAND_MARK;
+import static skylee.storage.Command.COMMAND_UNMARK;
+import static skylee.storage.Command.COMMAND_TODO;
+import static skylee.storage.Command.COMMAND_DEADLINE;
+import static skylee.storage.Command.COMMAND_EVENT;
+import static skylee.storage.Command.COMMAND_DELETE;
 
 import static skylee.ui.Message.PREFIX_TASK;
 import static skylee.ui.Message.PREFIX_EXCEPTION;
@@ -41,38 +42,10 @@ import static skylee.ui.Message.MESSAGE_IO_EXCEPTION;
 public class Skylee {
     private static ArrayList<Task> tasks = new ArrayList<>();
     private Ui ui;
-
-    private static void loadFile() {
-        try {
-            File file = new File(Config.PATH_SAVE);
-            Scanner scanner = new Scanner(file);
-            while (scanner.hasNextLine()) {
-                tasks.add(Task.parseTask(scanner.nextLine()));
-            }
-        } catch (Exception e) {
-            tasks = new ArrayList<>();
-        }
-    }
-
-    private static void saveFile() throws SkyleeException {
-        try {
-            File file = new File(Config.PATH_SAVE);
-            if (!file.exists()) {
-                file.getParentFile().mkdirs();
-                file.createNewFile();
-            }
-            FileWriter fileWriter = new FileWriter(file);
-            for (Task task: tasks) {
-                fileWriter.write(task.show() + "\n");
-            }
-            fileWriter.close();
-        } catch (IOException e) {
-            throw new SkyleeException(MESSAGE_IO_EXCEPTION);
-        }
-    }
+    private Storage storage;
 
     private void bye() throws SkyleeException {
-        saveFile();
+        storage.saveFile(tasks);
         ui.showMessages(MESSAGE_BYE);
         System.exit(0);
     }
@@ -174,7 +147,7 @@ public class Skylee {
     }
 
     public void run() {
-        loadFile();
+        tasks = storage.loadFile();
         ui.showMessages(MESSAGE_HELLO);
         Scanner scanner = new Scanner(System.in);
         for (;;) {

@@ -1,13 +1,13 @@
 package skylee.task;
 
 import skylee.exception.SkyleeException;
-import skylee.io.Config;
+import skylee.storage.Config;
 
 import static skylee.ui.Message.MESSAGE_BY_MISSING;
 import static skylee.ui.Message.MESSAGE_DEADLINE_EMPTY;
 import static skylee.ui.Message.MESSAGE_BY_EMPTY;
 
-import static skylee.io.Parameter.PARAMETER_BY;
+import static skylee.storage.Parameter.PARAMETER_BY;
 
 public class Deadline extends Task {
     public static final String type = "D";

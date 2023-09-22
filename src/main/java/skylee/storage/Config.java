@@ -1,4 +1,4 @@
-package skylee.io;
+package skylee.storage;
 
 public class Config {
     public static final String PATH_SAVE = "./data/skylee.txt";
