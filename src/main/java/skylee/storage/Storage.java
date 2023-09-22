@@ -14,8 +14,8 @@ import java.util.Scanner;
 import static skylee.ui.Message.MESSAGE_IO_EXCEPTION;
 
 public class Storage {
-    public ArrayList<Task> loadFile() {
-        ArrayList<Task> tasks = new ArrayList<>();
+    public TaskList loadFile() {
+        TaskList tasks = new TaskList();
         try {
             File file = new File(Config.PATH_SAVE);
             Scanner scanner = new Scanner(file);
@@ -24,7 +24,7 @@ public class Storage {
             }
             return tasks;
         } catch (Exception e) {
-            return new ArrayList<>();
+            return new TaskList();
         }
     }
 

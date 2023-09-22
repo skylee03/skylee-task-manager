@@ -6,6 +6,8 @@ import java.util.Scanner;
 
 import static skylee.ui.Message.LINE;
 import static skylee.ui.Message.PREFIX_MESSAGE;
+import static skylee.ui.Message.PREFIX_EXCEPTION;
+import static skylee.ui.Message.MESSAGE_HELLO;
 
 public class Ui {
     private final Scanner in;
@@ -30,5 +32,13 @@ public class Ui {
             out.println(PREFIX_MESSAGE + message);
         }
         out.println(LINE);
+    }
+
+    private static String[] showException(String message) {
+        return new String[]{PREFIX_EXCEPTION + message};
+    }
+
+    public void showWelcome() {
+        showMessages(MESSAGE_HELLO);
     }
 }

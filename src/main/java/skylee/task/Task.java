@@ -32,14 +32,6 @@ abstract public class Task {
         return (isDone() ? "X" : " "); // mark done task with X
     }
 
-    public void markAsDone() {
-        setDone(true);
-    }
-
-    public void unmarkAsNotDone() {
-        setDone(false);
-    }
-
     public String toString() {
         return "[" + getStatusIcon() + "] " + getDescription();
     }

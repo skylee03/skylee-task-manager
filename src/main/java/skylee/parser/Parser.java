@@ -1,5 +1,12 @@
 package skylee.parser;
 
+import skylee.commands.AddCommand;
+import skylee.commands.ByeCommand;
+import skylee.commands.Command;
+import skylee.commands.DeleteCommand;
+import skylee.commands.ListCommand;
+import skylee.commands.MarkCommand;
+import skylee.commands.UnmarkCommand;
 import skylee.exception.SkyleeException;
 import skylee.storage.Config;
 import skylee.task.Deadline;
@@ -7,13 +14,65 @@ import skylee.task.Event;
 import skylee.task.Task;
 import skylee.task.Todo;
 
-import static skylee.parser.Parameter.*;
-import static skylee.ui.Message.*;
+import static skylee.parser.CommandName.COMMAND_BYE;
+import static skylee.parser.CommandName.COMMAND_DEADLINE;
+import static skylee.parser.CommandName.COMMAND_DELETE;
+import static skylee.parser.CommandName.COMMAND_EVENT;
+import static skylee.parser.CommandName.COMMAND_LIST;
+import static skylee.parser.CommandName.COMMAND_MARK;
+import static skylee.parser.CommandName.COMMAND_TODO;
+import static skylee.parser.CommandName.COMMAND_UNMARK;
+import static skylee.parser.Parameter.PARAMETER_BY;
+import static skylee.parser.Parameter.PARAMETER_FROM;
+import static skylee.parser.Parameter.PARAMETER_TO;
+import static skylee.ui.Message.MESSAGE_BY_EMPTY;
+import static skylee.ui.Message.MESSAGE_BY_MISSING;
+import static skylee.ui.Message.MESSAGE_DEADLINE_EMPTY;
+import static skylee.ui.Message.MESSAGE_EVENT_EMPTY;
+import static skylee.ui.Message.MESSAGE_FILE_FORMAT_ERROR;
+import static skylee.ui.Message.MESSAGE_FROM_EMPTY;
+import static skylee.ui.Message.MESSAGE_FROM_MISSING;
+import static skylee.ui.Message.MESSAGE_ID_FORMAT;
+import static skylee.ui.Message.MESSAGE_TODO_EMPTY;
+import static skylee.ui.Message.MESSAGE_TO_EMPTY;
+import static skylee.ui.Message.MESSAGE_TO_MISSING;
+import static skylee.ui.Message.MESSAGE_UNKNOWN_COMMAND;
+
 
 public class Parser {
     public static String[] splitCommandWordAndArgs(String rawUserInput) {
         final String[] split = rawUserInput.trim().split("\\s+", 2);
         return split.length == 2 ? split : new String[] { split[0] , "" };
+    }
+
+    public static Command parseCommand(String rawUserInput) throws SkyleeException {
+        final String[] commandTypeAndParams = splitCommandWordAndArgs(rawUserInput);
+        final String commandType = commandTypeAndParams[0];
+        final String commandArgs = commandTypeAndParams[1];
+        try {
+            switch (commandType) {
+            case COMMAND_BYE:
+                return new ByeCommand();
+            case COMMAND_LIST:
+                return new ListCommand();
+            case COMMAND_MARK:
+                return new MarkCommand(parseTaskId(commandArgs));
+            case COMMAND_UNMARK:
+                return new UnmarkCommand(parseTaskId(commandArgs));
+            case COMMAND_TODO:
+                return new AddCommand(parseTodo(commandArgs));
+            case COMMAND_DEADLINE:
+                return new AddCommand(parseDeadline(commandArgs));
+            case COMMAND_EVENT:
+                return new AddCommand(parseEvent(commandArgs));
+            case COMMAND_DELETE:
+                return new DeleteCommand(parseTaskId(commandArgs));
+            default:
+                throw new SkyleeException(MESSAGE_UNKNOWN_COMMAND);
+            }
+        } catch (SkyleeException e) {
+            throw e;
+        }
     }
 
     public static int parseTaskId(String commandArgs) throws SkyleeException {

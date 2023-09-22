@@ -1,6 +1,6 @@
 package skylee.parser;
 
-public class Command {
+public class CommandName {
     public static final String COMMAND_BYE = "bye";
     public static final String COMMAND_LIST = "list";
     public static final String COMMAND_MARK = "mark";
