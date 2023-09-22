@@ -3,7 +3,7 @@ package skylee.task;
 import skylee.exception.SkyleeException;
 import skylee.io.Config;
 
-import static skylee.io.Message.MESSAGE_TODO_EMPTY;
+import static skylee.ui.Message.MESSAGE_TODO_EMPTY;
 
 public class Todo extends Task {
     public static final String type = "T";

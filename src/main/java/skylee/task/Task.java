@@ -3,7 +3,7 @@ package skylee.task;
 import skylee.exception.SkyleeException;
 import skylee.io.Config;
 
-import static skylee.io.Message.MESSAGE_FILE_FORMAT_ERROR;
+import static skylee.ui.Message.MESSAGE_FILE_FORMAT_ERROR;
 
 abstract public class Task {
     private String description;

@@ -6,6 +6,7 @@ import skylee.task.Deadline;
 import skylee.task.Event;
 import skylee.task.Task;
 import skylee.task.Todo;
+import skylee.ui.Ui;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -22,33 +23,24 @@ import static skylee.io.Command.COMMAND_DEADLINE;
 import static skylee.io.Command.COMMAND_EVENT;
 import static skylee.io.Command.COMMAND_DELETE;
 
-import static skylee.io.Message.LINE;
-import static skylee.io.Message.PREFIX_MESSAGE;
-import static skylee.io.Message.PREFIX_TASK;
-import static skylee.io.Message.PREFIX_EXCEPTION;
-import static skylee.io.Message.MESSAGE_HELLO;
-import static skylee.io.Message.MESSAGE_BYE;
-import static skylee.io.Message.MESSAGE_UNKNOWN_COMMAND;
-import static skylee.io.Message.MESSAGE_ID_FORMAT;
-import static skylee.io.Message.MESSAGE_ID_OUT_OF_RANGE;
-import static skylee.io.Message.MESSAGE_LIST;
-import static skylee.io.Message.MESSAGE_UNMARK;
-import static skylee.io.Message.MESSAGE_MARK;
-import static skylee.io.Message.MESSAGE_DELETE;
-import static skylee.io.Message.MESSAGE_ADD;
-import static skylee.io.Message.MESSAGE_COUNT;
-import static skylee.io.Message.MESSAGE_IO_EXCEPTION;
+import static skylee.ui.Message.PREFIX_TASK;
+import static skylee.ui.Message.PREFIX_EXCEPTION;
+import static skylee.ui.Message.MESSAGE_HELLO;
+import static skylee.ui.Message.MESSAGE_BYE;
+import static skylee.ui.Message.MESSAGE_UNKNOWN_COMMAND;
+import static skylee.ui.Message.MESSAGE_ID_FORMAT;
+import static skylee.ui.Message.MESSAGE_ID_OUT_OF_RANGE;
+import static skylee.ui.Message.MESSAGE_LIST;
+import static skylee.ui.Message.MESSAGE_UNMARK;
+import static skylee.ui.Message.MESSAGE_MARK;
+import static skylee.ui.Message.MESSAGE_DELETE;
+import static skylee.ui.Message.MESSAGE_ADD;
+import static skylee.ui.Message.MESSAGE_COUNT;
+import static skylee.ui.Message.MESSAGE_IO_EXCEPTION;
 
 public class Skylee {
     private static ArrayList<Task> tasks = new ArrayList<>();
-
-    private static void showMessages(String... messages) {
-        System.out.print(LINE);
-        for (String message : messages) {
-            System.out.println(PREFIX_MESSAGE + message);
-        }
-        System.out.println(LINE);
-    }
+    private Ui ui;
 
     private static void loadFile() {
         try {
@@ -79,9 +71,9 @@ public class Skylee {
         }
     }
 
-    private static void bye() throws SkyleeException {
+    private void bye() throws SkyleeException {
         saveFile();
-        showMessages(MESSAGE_BYE);
+        ui.showMessages(MESSAGE_BYE);
         System.exit(0);
     }
 
@@ -146,7 +138,7 @@ public class Skylee {
         return split.length == 2 ? split : new String[] { split[0] , "" };
     }
     
-    private static String[] executeCommand(String userInputString) {
+    private String[] executeCommand(String userInputString) {
         final String[] commandTypeAndParams = splitCommandWordAndArgs(userInputString);
         final String commandType = commandTypeAndParams[0];
         final String commandArgs = commandTypeAndParams[1];
@@ -178,13 +170,17 @@ public class Skylee {
     }
 
     public static void main(String[] args) {
+        new Skylee().run();
+    }
+
+    public void run() {
         loadFile();
-        showMessages(MESSAGE_HELLO);
+        ui.showMessages(MESSAGE_HELLO);
         Scanner scanner = new Scanner(System.in);
         for (;;) {
-            final String command = scanner.nextLine();
+            final String command = ui.getUserCommand();
             final String[] feedback = executeCommand(command);
-            showMessages(feedback);
+            ui.showMessages(feedback);
         }
     }
 }

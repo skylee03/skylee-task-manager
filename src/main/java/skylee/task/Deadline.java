@@ -3,9 +3,9 @@ package skylee.task;
 import skylee.exception.SkyleeException;
 import skylee.io.Config;
 
-import static skylee.io.Message.MESSAGE_BY_MISSING;
-import static skylee.io.Message.MESSAGE_DEADLINE_EMPTY;
-import static skylee.io.Message.MESSAGE_BY_EMPTY;
+import static skylee.ui.Message.MESSAGE_BY_MISSING;
+import static skylee.ui.Message.MESSAGE_DEADLINE_EMPTY;
+import static skylee.ui.Message.MESSAGE_BY_EMPTY;
 
 import static skylee.io.Parameter.PARAMETER_BY;
 

@@ -1,4 +1,4 @@
-package skylee.io;
+package skylee.ui;
 
 public class Message {
     public static final String LINE = "____________________________________________________________\n";
