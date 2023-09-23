@@ -10,4 +10,5 @@ public class CommandName {
     public static final String COMMAND_EVENT = "event";
     public static final String COMMAND_DELETE = "delete";
     public static final String COMMAND_FIND = "find";
+    public static final String COMMAND_DATE = "date";
 }

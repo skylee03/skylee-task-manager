@@ -3,6 +3,7 @@ package skylee.parser;
 import skylee.commands.AddCommand;
 import skylee.commands.ByeCommand;
 import skylee.commands.Command;
+import skylee.commands.DateCommand;
 import skylee.commands.DeleteCommand;
 import skylee.commands.FindCommand;
 import skylee.commands.ListCommand;
@@ -15,7 +16,12 @@ import skylee.task.Event;
 import skylee.task.Task;
 import skylee.task.Todo;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeParseException;
+
 import static skylee.parser.CommandName.COMMAND_BYE;
+import static skylee.parser.CommandName.COMMAND_DATE;
 import static skylee.parser.CommandName.COMMAND_DEADLINE;
 import static skylee.parser.CommandName.COMMAND_DELETE;
 import static skylee.parser.CommandName.COMMAND_EVENT;
@@ -35,6 +41,7 @@ import static skylee.ui.Message.MESSAGE_FILE_FORMAT_ERROR;
 import static skylee.ui.Message.MESSAGE_FROM_EMPTY;
 import static skylee.ui.Message.MESSAGE_FROM_MISSING;
 import static skylee.ui.Message.MESSAGE_ID_FORMAT;
+import static skylee.ui.Message.MESSAGE_TIME_FORMAT_ERROR;
 import static skylee.ui.Message.MESSAGE_TODO_EMPTY;
 import static skylee.ui.Message.MESSAGE_TO_EMPTY;
 import static skylee.ui.Message.MESSAGE_TO_MISSING;
@@ -71,6 +78,8 @@ public class Parser {
                 return new DeleteCommand(parseTaskId(commandArgs));
             case COMMAND_FIND:
                 return new FindCommand(commandArgs);
+            case COMMAND_DATE:
+                return new DateCommand(parseDate(commandArgs));
             default:
                 throw new SkyleeException(MESSAGE_UNKNOWN_COMMAND);
             }
@@ -79,7 +88,7 @@ public class Parser {
         }
     }
 
-    public static int parseTaskId(String commandArgs) throws SkyleeException {
+    private static int parseTaskId(String commandArgs) throws SkyleeException {
         int taskId;
         try {
             taskId = Integer.parseInt(commandArgs) - 1;
@@ -102,18 +111,29 @@ public class Parser {
             if (fields.length != 4) {
                 throw new SkyleeException(MESSAGE_FILE_FORMAT_ERROR);
             }
-            return new Deadline(fields[2], fields[3], isDone);
+            try {
+                LocalDateTime by = LocalDateTime.parse(fields[3]);
+                return new Deadline(fields[2], by, isDone);
+            } catch (DateTimeParseException e) {
+                throw new SkyleeException(MESSAGE_FILE_FORMAT_ERROR);
+            }
         case Event.type:
             if (fields.length != 5) {
                 throw new SkyleeException(MESSAGE_FILE_FORMAT_ERROR);
             }
-            return new Event(fields[2], fields[3], fields[4], isDone);
+            try {
+                LocalDateTime from = LocalDateTime.parse(fields[3]);
+                LocalDateTime to = LocalDateTime.parse(fields[4]);
+                return new Event(fields[2], from, to, isDone);
+            } catch (DateTimeParseException e) {
+                throw new SkyleeException(MESSAGE_FILE_FORMAT_ERROR);
+            }
         default:
             throw new SkyleeException(MESSAGE_FILE_FORMAT_ERROR);
         }
     }
 
-    public static Todo parseTodo(String commandArgs) throws SkyleeException {
+    private static Todo parseTodo(String commandArgs) throws SkyleeException {
         final String description = commandArgs;
         if (description.isEmpty()) {
             throw new SkyleeException(MESSAGE_TODO_EMPTY);
@@ -121,7 +141,7 @@ public class Parser {
         return new Todo(description);
     }
 
-    public static Deadline parseDeadline(String commandArgs) throws SkyleeException {
+    private static Deadline parseDeadline(String commandArgs) throws SkyleeException {
         final int byIndex = commandArgs.indexOf(PARAMETER_BY);
         if (byIndex == -1) {
             throw new SkyleeException(MESSAGE_BY_MISSING);
@@ -134,10 +154,14 @@ public class Parser {
         if (by.isEmpty()) {
             throw new SkyleeException(MESSAGE_BY_EMPTY);
         }
-        return new Deadline(description, by);
+        try {
+            return new Deadline(description, LocalDateTime.parse(by));
+        } catch (DateTimeParseException e) {
+            throw new SkyleeException(MESSAGE_TIME_FORMAT_ERROR);
+        }
     }
 
-    public static Event parseEvent(String commandArgs) throws SkyleeException {
+    private static Event parseEvent(String commandArgs) throws SkyleeException {
         final int fromIndex = commandArgs.indexOf(PARAMETER_FROM);
         final int toIndex = commandArgs.indexOf(PARAMETER_TO);
         if (fromIndex == -1) {
@@ -158,6 +182,18 @@ public class Parser {
         if (to.isEmpty()) {
             throw new SkyleeException(MESSAGE_TO_EMPTY);
         }
-        return new Event(description, from, to);
+        try {
+            return new Event(description, LocalDateTime.parse(from), LocalDateTime.parse(to));
+        } catch (DateTimeParseException e) {
+            throw new SkyleeException(MESSAGE_TIME_FORMAT_ERROR);
+        }
+    }
+
+    private static LocalDate parseDate(String commandArgs) throws SkyleeException {
+        try {
+            return LocalDate.parse(commandArgs);
+        } catch (DateTimeParseException e) {
+            throw new SkyleeException(MESSAGE_TIME_FORMAT_ERROR);
+        }
     }
 }
