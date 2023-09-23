@@ -11,6 +11,7 @@ public class Message {
     public static final String MESSAGE_ID_FORMAT = "Task ID must be an integer.";
     public static final String MESSAGE_ID_OUT_OF_RANGE = "Task ID is out of range.";
     public static final String MESSAGE_LIST = "Here are the tasks in your list:";
+    public static final String MESSAGE_FIND = "Here are the matching tasks in your list:";
     public static final String MESSAGE_DATE = "Here are the tasks occurring on the given date:";
     public static final String MESSAGE_UNMARK = "OK, I've marked this task as not done yet:";
     public static final String MESSAGE_MARK = "Nice! I've marked this task as done:";

@@ -5,6 +5,7 @@ import skylee.commands.ByeCommand;
 import skylee.commands.Command;
 import skylee.commands.DateCommand;
 import skylee.commands.DeleteCommand;
+import skylee.commands.FindCommand;
 import skylee.commands.ListCommand;
 import skylee.commands.MarkCommand;
 import skylee.commands.UnmarkCommand;
@@ -24,6 +25,7 @@ import static skylee.parser.CommandName.COMMAND_DATE;
 import static skylee.parser.CommandName.COMMAND_DEADLINE;
 import static skylee.parser.CommandName.COMMAND_DELETE;
 import static skylee.parser.CommandName.COMMAND_EVENT;
+import static skylee.parser.CommandName.COMMAND_FIND;
 import static skylee.parser.CommandName.COMMAND_LIST;
 import static skylee.parser.CommandName.COMMAND_MARK;
 import static skylee.parser.CommandName.COMMAND_TODO;
@@ -74,6 +76,8 @@ public class Parser {
                 return new AddCommand(parseEvent(commandArgs));
             case COMMAND_DELETE:
                 return new DeleteCommand(parseTaskId(commandArgs));
+            case COMMAND_FIND:
+                return new FindCommand(commandArgs);
             case COMMAND_DATE:
                 return new DateCommand(parseDate(commandArgs));
             default:
