@@ -1,4 +1,7 @@
 ---
+permalink: /
+redirect_from:
+  - /about
 layout: page
 title: STM User Guide
 ---
