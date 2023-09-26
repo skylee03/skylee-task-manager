@@ -47,13 +47,31 @@ import static skylee.ui.Message.MESSAGE_TO_EMPTY;
 import static skylee.ui.Message.MESSAGE_TO_MISSING;
 import static skylee.ui.Message.MESSAGE_UNKNOWN_COMMAND;
 
-
+/**
+ * Defines the basic methods for command parser.
+ */
 public class Parser {
+    /**
+     * Splits the raw user input into two parts, and then returns them.
+     * The first part is the command type, while the second part is the command arguments.
+     * The second part can be empty.
+     *
+     * @param rawUserInput  The raw user input.
+     * @return              A string array whose first element is the command type
+     *                      and the second element is the command arguments.
+     */
     public static String[] splitCommandWordAndArgs(String rawUserInput) {
         final String[] split = rawUserInput.trim().split("\\s+", 2);
         return split.length == 2 ? split : new String[] { split[0] , "" };
     }
 
+    /**
+     * Parses the raw user input and returns the corresponding command object.
+     *
+     * @param rawUserInput      The raw user input.
+     * @return                  An object representing the command.
+     * @throws SkyleeException
+     */
     public static Command parseCommand(String rawUserInput) throws SkyleeException {
         final String[] commandTypeAndParams = splitCommandWordAndArgs(rawUserInput);
         final String commandType = commandTypeAndParams[0];
@@ -88,6 +106,13 @@ public class Parser {
         }
     }
 
+    /**
+     * Parses the task id from the command arguments.
+     *
+     * @param commandArgs       The command arguments.
+     * @return                  The task ID.
+     * @throws SkyleeException
+     */
     private static int parseTaskId(String commandArgs) throws SkyleeException {
         int taskId;
         try {
@@ -98,6 +123,13 @@ public class Parser {
         return taskId;
     }
 
+    /**
+     * Parses the task record from the line read from the file.
+     *
+     * @param line              The line read from the file.
+     * @return                  The task record.
+     * @throws SkyleeException
+     */
     public static Task parseTask(String line) throws SkyleeException {
         String[] fields = line.split(Config.DELIMITER_REGEX);
         boolean isDone = Integer.parseInt(fields[1]) != 0;
@@ -133,6 +165,13 @@ public class Parser {
         }
     }
 
+    /**
+     * Parses the <code>Todo</code> object from the command arguments.
+     *
+     * @param commandArgs       The command arguments.
+     * @return                  The <code>Todo</code> object.
+     * @throws SkyleeException
+     */
     private static Todo parseTodo(String commandArgs) throws SkyleeException {
         final String description = commandArgs;
         if (description.isEmpty()) {
@@ -141,6 +180,13 @@ public class Parser {
         return new Todo(description);
     }
 
+    /**
+     * Parses the <code>Deadline</code> object from the command arguments.
+     *
+     * @param commandArgs       The command arguments.
+     * @return                  The <code>Deadline</code> object.
+     * @throws SkyleeException
+     */
     private static Deadline parseDeadline(String commandArgs) throws SkyleeException {
         final int byIndex = commandArgs.indexOf(PARAMETER_BY);
         if (byIndex == -1) {
@@ -161,6 +207,13 @@ public class Parser {
         }
     }
 
+    /**
+     * Parses the <code>Event</code> object from the command arguments.
+     *
+     * @param commandArgs       The command arguments.
+     * @return                  The <code>Event</code> object.
+     * @throws SkyleeException
+     */
     private static Event parseEvent(String commandArgs) throws SkyleeException {
         final int fromIndex = commandArgs.indexOf(PARAMETER_FROM);
         final int toIndex = commandArgs.indexOf(PARAMETER_TO);
@@ -189,6 +242,13 @@ public class Parser {
         }
     }
 
+    /**
+     * Parses the <code>LocalDate</code> object from the command arguments.
+     *
+     * @param commandArgs       The command arguments.
+     * @return                  The <code>LocalDate</code> object.
+     * @throws SkyleeException
+     */
     private static LocalDate parseDate(String commandArgs) throws SkyleeException {
         try {
             return LocalDate.parse(commandArgs);
