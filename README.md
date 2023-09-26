@@ -1,24 +1,27 @@
-# Duke project template
+# Skylee Task Manager
 
-This is a project template for a greenfield Java project. It's named after the Java mascot _Duke_. Given below are instructions on how to use it.
+Skylee Task Manager (STM) is a **cross-platform command-line app for managing tasks**. If you can type fast, STM can get your task management tasks done faster than traditional GUI apps.
 
-## Setting up in Intellij
+## Quick start
 
-Prerequisites: JDK 11, update Intellij to the most recent version.
+1. Ensure you have Java `11` or above installed in your computer.
+1. Download the latest `ip.jar` from [here](https://github.com/skylee03/ip/releases).
+1. Copy the file to the folder you want to use as the _home folder_ for your STM.
+1. Open a command terminal, `cd` into the folder you put the JAR file in, and use the `java -jar ip.jar` command to run the application.
 
-1. Open Intellij (if you are not in the welcome screen, click `File` > `Close Project` to close the existing project first)
-1. Open the project into Intellij as follows:
-   1. Click `Open`.
-   1. Select the project directory, and click `OK`.
-   1. If there are any further prompts, accept the defaults.
-1. Configure the project to use **JDK 11** (not other versions) as explained in [here](https://www.jetbrains.com/help/idea/sdk.html#set-up-jdk).<br>
-   In the same dialog, set the **Project language level** field to the `SDK default` option.
-3. After that, locate the `src/main/java/Duke.java` file, right-click it, and choose `Run Duke.main()` (if the code editor is showing compile errors, try restarting the IDE). If the setup is correct, you should see something like the below as the output:
-   ```
-   Hello from
-    ____        _        
-   |  _ \ _   _| | _____ 
-   | | | | | | | |/ / _ \
-   | |_| | |_| |   <  __/
-   |____/ \__,_|_|\_\___|
-   ```
+    A welcome message similar to the below should appear in a few milliseconds.
+    ```
+    ____________________________________________________________
+    Hello! I'm Skylee!
+    What can I do for you?
+    ____________________________________________________________
+    ```
+
+1. Type the command after the prompt `> ` and press Enter to execute it.
+1. Refer to the [User Guide](https://skylee03.github.io/ip/) for details of each command.
+
+## Report Bugs
+
+STM is currently under active development.
+
+If you find any bugs or errors, we would appreciate if you could help [report](https://github.com/skylee03/ip/issues) these issues so that we could repair them accordingly.
