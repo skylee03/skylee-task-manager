@@ -43,6 +43,7 @@ public class Ui {
      * @return The user's input.
      */
     public String getUserCommand() {
+        out.print("> ");
         return in.nextLine();
     }
 
