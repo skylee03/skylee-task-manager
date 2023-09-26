@@ -1,17 +1,17 @@
 package skylee.task;
 
-import skylee.storage.Config;
+import static skylee.storage.Config.DATE_TIME_FORMAT;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-import static skylee.storage.Config.DATE_TIME_FORMAT;
+import skylee.storage.Config;
 
 /**
  * Defines the basic fields and methods of a deadline.
  */
 public class Deadline extends Task {
-    public static final String type = "D";
+    public static final String TYPE = "D";
 
     protected LocalDateTime by;
 
@@ -48,7 +48,7 @@ public class Deadline extends Task {
      */
     @Override
     public String toString() {
-        return "[" + type + "]" + super.toString() + " (by: " + by.format(DATE_TIME_FORMAT) + ")";
+        return "[" + TYPE + "]" + super.toString() + " (by: " + by.format(DATE_TIME_FORMAT) + ")";
     }
 
     /**
@@ -58,7 +58,7 @@ public class Deadline extends Task {
      */
     @Override
     public String show() {
-        return String.join(Config.DELIMITER, type, isDone() ? "1" : "0", getDescription(), by.toString());
+        return String.join(Config.DELIMITER, TYPE, isDone() ? "1" : "0", getDescription(), by.toString());
     }
 
     /**

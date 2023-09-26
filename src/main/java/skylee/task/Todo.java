@@ -6,7 +6,7 @@ import skylee.storage.Config;
  * Defines the basic fields and methods of a todo.
  */
 public class Todo extends Task {
-    public static final String type = "T";
+    public static final String TYPE = "T";
 
     /**
      * Constructs a <code>Todo</code> object with the description.
@@ -36,7 +36,7 @@ public class Todo extends Task {
      */
     @Override
     public String toString() {
-        return "[" + type + "]" + super.toString();
+        return "[" + TYPE + "]" + super.toString();
     }
 
     /**
@@ -46,6 +46,6 @@ public class Todo extends Task {
      */
     @Override
     public String show() {
-        return String.join(Config.DELIMITER, type, isDone() ? "1" : "0", getDescription());
+        return String.join(Config.DELIMITER, TYPE, isDone() ? "1" : "0", getDescription());
     }
 }

@@ -1,11 +1,11 @@
 package skylee.commands;
 
-import skylee.exception.SkyleeException;
-import skylee.task.TaskList;
-
 import static skylee.ui.Message.MESSAGE_ID_OUT_OF_RANGE;
 import static skylee.ui.Message.MESSAGE_UNMARK;
 import static skylee.ui.Message.PREFIX_TASK;
+
+import skylee.exception.SkyleeException;
+import skylee.task.TaskList;
 
 /**
  * Defines the basic fields and methods of an unmark command.
@@ -34,7 +34,6 @@ public class UnmarkCommand extends Command {
             throw new SkyleeException(MESSAGE_ID_OUT_OF_RANGE);
         }
         tasks.get(taskId).setDone(false);
-        return new String[]{MESSAGE_UNMARK,
-                PREFIX_TASK + tasks.get(taskId)};
+        return new String[]{MESSAGE_UNMARK, PREFIX_TASK + tasks.get(taskId)};
     }
 }

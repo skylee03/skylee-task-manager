@@ -1,13 +1,13 @@
 package skylee.ui;
 
+import static skylee.ui.Message.LINE;
+import static skylee.ui.Message.MESSAGE_HELLO;
+import static skylee.ui.Message.PREFIX_EXCEPTION;
+import static skylee.ui.Message.PREFIX_MESSAGE;
+
 import java.io.InputStream;
 import java.io.PrintStream;
 import java.util.Scanner;
-
-import static skylee.ui.Message.LINE;
-import static skylee.ui.Message.PREFIX_MESSAGE;
-import static skylee.ui.Message.PREFIX_EXCEPTION;
-import static skylee.ui.Message.MESSAGE_HELLO;
 
 /**
  * Defines the behavior of the CLI.

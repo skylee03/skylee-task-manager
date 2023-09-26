@@ -1,9 +1,9 @@
 package skylee.commands;
 
+import static skylee.ui.Message.MESSAGE_BYE;
+
 import skylee.exception.SkyleeException;
 import skylee.task.TaskList;
-
-import static skylee.ui.Message.MESSAGE_BYE;
 
 /**
  * Defines the basic fields and methods of a bye command.
