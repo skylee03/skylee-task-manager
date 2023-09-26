@@ -2,18 +2,25 @@ package skylee.storage;
 
 import skylee.exception.SkyleeException;
 import skylee.parser.Parser;
-import skylee.task.Task;
 import skylee.task.TaskList;
 
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Scanner;
 
 import static skylee.ui.Message.MESSAGE_IO_EXCEPTION;
 
+/**
+ * Defines the basic methods for file storage.
+ */
 public class Storage {
+    /**
+     * Returns the task list read from the file, or an empty
+     * task list if the file does not exist or cannot be parsed properly.
+     *
+     * @return  The task list read from the file, or an empty task list.
+     */
     public TaskList loadFile() {
         TaskList tasks = new TaskList();
         try {
@@ -28,6 +35,12 @@ public class Storage {
         }
     }
 
+    /**
+     * Saves the tasks into the file.
+     *
+     * @param tasks             The tasks to be saved.
+     * @throws SkyleeException
+     */
     public void saveFile(TaskList tasks) throws SkyleeException {
         try {
             File file = new File(Config.PATH_SAVE);

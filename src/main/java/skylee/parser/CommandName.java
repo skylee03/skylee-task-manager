@@ -1,5 +1,8 @@
 package skylee.parser;
 
+/**
+ * Defines string literals for command names.
+ */
 public class CommandName {
     public static final String COMMAND_BYE = "bye";
     public static final String COMMAND_LIST = "list";

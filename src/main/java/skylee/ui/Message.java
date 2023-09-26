@@ -1,5 +1,8 @@
 package skylee.ui;
 
+/**
+ * Defines string literals for the output messages.
+ */
 public class Message {
     public static final String LINE = "____________________________________________________________\n";
     public static final String PREFIX_MESSAGE = " ";
