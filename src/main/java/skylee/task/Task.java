@@ -5,7 +5,7 @@ import java.time.LocalDate;
 /**
  * Defines the basic fields and methods of a task.
  */
-abstract public class Task {
+public abstract class Task {
     private String description;
 
     private boolean isDone;
@@ -37,7 +37,7 @@ abstract public class Task {
      *
      * @return  A parser-friendly string representing the task.
      */
-    abstract public String show();
+    public abstract String show();
 
     /**
      * Returns the description of the task.

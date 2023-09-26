@@ -1,25 +1,5 @@
 package skylee.parser;
 
-import skylee.commands.AddCommand;
-import skylee.commands.ByeCommand;
-import skylee.commands.Command;
-import skylee.commands.DateCommand;
-import skylee.commands.DeleteCommand;
-import skylee.commands.FindCommand;
-import skylee.commands.ListCommand;
-import skylee.commands.MarkCommand;
-import skylee.commands.UnmarkCommand;
-import skylee.exception.SkyleeException;
-import skylee.storage.Config;
-import skylee.task.Deadline;
-import skylee.task.Event;
-import skylee.task.Task;
-import skylee.task.Todo;
-
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeParseException;
-
 import static skylee.parser.CommandName.COMMAND_BYE;
 import static skylee.parser.CommandName.COMMAND_DATE;
 import static skylee.parser.CommandName.COMMAND_DEADLINE;
@@ -46,6 +26,26 @@ import static skylee.ui.Message.MESSAGE_TODO_EMPTY;
 import static skylee.ui.Message.MESSAGE_TO_EMPTY;
 import static skylee.ui.Message.MESSAGE_TO_MISSING;
 import static skylee.ui.Message.MESSAGE_UNKNOWN_COMMAND;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeParseException;
+
+import skylee.commands.AddCommand;
+import skylee.commands.ByeCommand;
+import skylee.commands.Command;
+import skylee.commands.DateCommand;
+import skylee.commands.DeleteCommand;
+import skylee.commands.FindCommand;
+import skylee.commands.ListCommand;
+import skylee.commands.MarkCommand;
+import skylee.commands.UnmarkCommand;
+import skylee.exception.SkyleeException;
+import skylee.storage.Config;
+import skylee.task.Deadline;
+import skylee.task.Event;
+import skylee.task.Task;
+import skylee.task.Todo;
 
 /**
  * Defines the basic methods for command parser.
@@ -134,12 +134,12 @@ public class Parser {
         String[] fields = line.split(Config.DELIMITER_REGEX);
         boolean isDone = Integer.parseInt(fields[1]) != 0;
         switch (fields[0]) {
-        case Todo.type:
+        case Todo.TYPE:
             if (fields.length != 3) {
                 throw new SkyleeException(MESSAGE_FILE_FORMAT_ERROR);
             }
             return new Todo(fields[2], isDone);
-        case Deadline.type:
+        case Deadline.TYPE:
             if (fields.length != 4) {
                 throw new SkyleeException(MESSAGE_FILE_FORMAT_ERROR);
             }
@@ -149,7 +149,7 @@ public class Parser {
             } catch (DateTimeParseException e) {
                 throw new SkyleeException(MESSAGE_FILE_FORMAT_ERROR);
             }
-        case Event.type:
+        case Event.TYPE:
             if (fields.length != 5) {
                 throw new SkyleeException(MESSAGE_FILE_FORMAT_ERROR);
             }

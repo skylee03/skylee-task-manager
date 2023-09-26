@@ -1,15 +1,15 @@
 package skylee.storage;
 
-import skylee.exception.SkyleeException;
-import skylee.parser.Parser;
-import skylee.task.TaskList;
+import static skylee.ui.Message.MESSAGE_IO_EXCEPTION;
 
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Scanner;
 
-import static skylee.ui.Message.MESSAGE_IO_EXCEPTION;
+import skylee.exception.SkyleeException;
+import skylee.parser.Parser;
+import skylee.task.TaskList;
 
 /**
  * Defines the basic methods for file storage.

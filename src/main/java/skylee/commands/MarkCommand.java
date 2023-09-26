@@ -1,11 +1,11 @@
 package skylee.commands;
 
-import skylee.exception.SkyleeException;
-import skylee.task.TaskList;
-
 import static skylee.ui.Message.MESSAGE_ID_OUT_OF_RANGE;
 import static skylee.ui.Message.MESSAGE_MARK;
 import static skylee.ui.Message.PREFIX_TASK;
+
+import skylee.exception.SkyleeException;
+import skylee.task.TaskList;
 
 /**
  * Defines the basic fields and methods of a mark command.
@@ -34,7 +34,6 @@ public class MarkCommand extends Command {
             throw new SkyleeException(MESSAGE_ID_OUT_OF_RANGE);
         }
         tasks.get(taskId).setDone(true);
-        return new String[]{MESSAGE_MARK,
-                PREFIX_TASK + tasks.get(taskId)};
+        return new String[]{MESSAGE_MARK, PREFIX_TASK + tasks.get(taskId)};
     }
 }

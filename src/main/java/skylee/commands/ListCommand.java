@@ -1,8 +1,8 @@
 package skylee.commands;
 
-import skylee.task.TaskList;
-
 import static skylee.ui.Message.MESSAGE_LIST;
+
+import skylee.task.TaskList;
 
 /**
  * Defines the basic fields and methods of a list command.

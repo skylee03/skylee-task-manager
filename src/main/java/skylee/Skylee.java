@@ -45,7 +45,7 @@ public class Skylee {
     public void run() {
         ui.showWelcome();
         boolean isExit = false;
-        while(!isExit) {
+        while (!isExit) {
             final String rawUserInput = ui.getUserCommand();
             try {
                 final Command command = Parser.parseCommand(rawUserInput);

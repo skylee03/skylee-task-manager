@@ -1,13 +1,13 @@
 package skylee.commands;
 
-import skylee.exception.SkyleeException;
-import skylee.task.Task;
-import skylee.task.TaskList;
-
 import static skylee.ui.Message.MESSAGE_COUNT;
 import static skylee.ui.Message.MESSAGE_DELETE;
 import static skylee.ui.Message.MESSAGE_ID_OUT_OF_RANGE;
 import static skylee.ui.Message.PREFIX_TASK;
+
+import skylee.exception.SkyleeException;
+import skylee.task.Task;
+import skylee.task.TaskList;
 
 /**
  * Defines the basic fields and methods of a delete command.
@@ -37,8 +37,7 @@ public class DeleteCommand extends Command {
         }
         final Task task = tasks.get(taskId);
         tasks.remove(taskId);
-        return new String[]{MESSAGE_DELETE,
-                PREFIX_TASK + task,
+        return new String[]{MESSAGE_DELETE, PREFIX_TASK + task,
                 String.format(MESSAGE_COUNT, tasks.size(), tasks.size() > 1 ? "s" : "")};
     }
 }

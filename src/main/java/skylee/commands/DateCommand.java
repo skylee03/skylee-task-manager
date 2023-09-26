@@ -1,12 +1,12 @@
 package skylee.commands;
 
-import skylee.task.Task;
-import skylee.task.TaskList;
+import static skylee.ui.Message.MESSAGE_DATE;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 
-import static skylee.ui.Message.MESSAGE_DATE;
+import skylee.task.Task;
+import skylee.task.TaskList;
 
 /**
  * Defines the basic fields and methods of a date command.

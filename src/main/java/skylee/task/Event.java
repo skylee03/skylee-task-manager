@@ -1,17 +1,17 @@
 package skylee.task;
 
-import skylee.storage.Config;
+import static skylee.storage.Config.DATE_TIME_FORMAT;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-import static skylee.storage.Config.DATE_TIME_FORMAT;
+import skylee.storage.Config;
 
 /**
  * Defines the basic fields and methods of a event.
  */
 public class Event extends Task {
-    public static final String type = "E";
+    public static final String TYPE = "E";
     protected LocalDateTime from;
     protected LocalDateTime to;
 
@@ -53,7 +53,7 @@ public class Event extends Task {
      */
     @Override
     public String toString() {
-        return "[" + type + "]" + super.toString()
+        return "[" + TYPE + "]" + super.toString()
                 + " (from: " + from.format(DATE_TIME_FORMAT)
                 + " to: " + to.format(DATE_TIME_FORMAT) + ")";
     }
@@ -65,7 +65,7 @@ public class Event extends Task {
      */
     @Override
     public String show() {
-        return String.join(Config.DELIMITER, type, isDone() ? "1" : "0",
+        return String.join(Config.DELIMITER, TYPE, isDone() ? "1" : "0",
                 getDescription(), from.toString(), to.toString());
     }
 
