@@ -9,8 +9,8 @@ sass:
 encoding: utf-8
 lang: en-US
 title: "Skylee Task Manager"
-url: "https://skylee03.github.io/ip"
-repo: "https://github.com/skylee03/ip"
+url: "https://skylee03.github.io/skylee-task-manager"
+repo: "https://github.com/skylee03/skylee-task-manager"
 email: "i@skylee.xyz"
 css_inline: true
 fonts:
